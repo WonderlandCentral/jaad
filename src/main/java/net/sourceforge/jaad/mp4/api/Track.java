@@ -363,23 +363,26 @@ public abstract class Track {
 		return (frame==null) ? -1 : frame.getTime();
 	}
 
-	public double method23326() {
-		double var3 = 0.0;
-		Frame frame;
-
-		for (int var6 = 0; var6 < this.frames.size(); var6++) {
-			frame = this.frames.get(var6++);
-
+	/**
+	 * Returns the end time of the available media data in seconds.
+	 * This can be used for streaming to determine how much has been buffered.
+	 *
+	 * @return the end time of available media in seconds.
+	 */
+	public double getAvailableEndTime() {
+		double maxTime = 0.0;
+		for (final Frame frame : frames) {
 			try {
-				if (frame.getOffset() <= this.in.getOffset() + this.in.getAvailable()) {
-					var3 = Math.max(frame.getTime(), var3);
+				final long availableEnd = in.getOffset() + in.getAvailable();
+				if ((frame.getOffset() + frame.getSize()) <= availableEnd) {
+					maxTime = Math.max(frame.getTime(), maxTime);
 				}
-			} catch (IOException exception) {
-				exception.printStackTrace();
+			}
+			catch (IOException e) {
+				Logger.getLogger("MP4 API").log(Level.WARNING, "Error checking available data for frame", e);
 			}
 		}
-
-		return var3;
+		return maxTime;
 	}
 
 	/**
