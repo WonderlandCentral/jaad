@@ -3,7 +3,7 @@
 
     <groupId>net.sourceforge.jaad</groupId>
     <artifactId>jaad</artifactId>
-    <version>1.0.1</version>
+    <version>1.0.2</version>
 
     <properties>
         <maven.compiler.release>8</maven.compiler.release>
